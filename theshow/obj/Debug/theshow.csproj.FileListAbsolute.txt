@@ -1,0 +1,9 @@
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\bin\Debug\theshow.exe.config
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\bin\Debug\theshow.exe
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\bin\Debug\theshow.pdb
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\obj\Debug\theshow.csprojResolveAssemblyReference.cache
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\obj\Debug\theshow.Form1.resources
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\obj\Debug\theshow.Properties.Resources.resources
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\obj\Debug\theshow.csproj.GenerateResource.Cache
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\obj\Debug\theshow.exe
+C:\Users\jesse\Source\Repos\MarketTracker\theshow\obj\Debug\theshow.pdb
