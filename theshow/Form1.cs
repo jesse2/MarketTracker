@@ -116,7 +116,7 @@ namespace theshow
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("theshownation.com/");
+            webBrowser1.Navigate("http://theshownation.com/marketplace/orders");
             comboBox1.SelectedIndex = -1;
             players = new List<play>();
             watchlist = new List<play2>();
@@ -168,6 +168,7 @@ namespace theshow
                 String sellprice = tempstring2.Substring(41, ((tempstring2.IndexOf(">") - 1) - 41));
                 label4.Text = sellprice;
                 double profit = double.Parse(buynow) - double.Parse(sellprice) - (double.Parse(buynow) * .1);
+                profit = Math.Round(profit, 0);
                 label6.Text = profit.ToString();
                 if(profit>0)
                 {
@@ -213,7 +214,12 @@ namespace theshow
                     }
                     comboBox1.Items.Clear();
                     getPlayers();
-                }                
+                }
+                else
+                {
+                    label10.Text = name + " already in list";
+                    label10.ForeColor = Color.Red;
+                }
             }
         }
 
@@ -317,6 +323,7 @@ namespace theshow
                         play.BuyNow = buynow;
                         play.SellNow = sellnow;
                         double profit = double.Parse(buynow) - double.Parse(sellnow) - (double.Parse(buynow) * .1);
+                        profit = Math.Round(profit, 0);
                         play.Profit = profit;
                         watchlist.Add(play);
                         count = 1;
@@ -324,6 +331,7 @@ namespace theshow
                 }
                 dataGridView1.DataSource = watchlist;
                 dataGridView1.RowHeadersVisible = false;
+                dataGridView1.Columns.Remove("ID");
                 dataGridView1.AutoResizeColumns();
             }
         }
