@@ -259,8 +259,16 @@ namespace theshow
 
         private void button3_Click(object sender, EventArgs e)
         {
-            String url = "http://theshownation.com/marketplace/search?utf8=✓&main_filter=MLB+Cards&display_name=" + textBox1.Text;
-            webBrowser1.Navigate(url);
+            if (textBox1.TextLength > 0)
+            {
+                String url = "http://theshownation.com/marketplace/search?utf8=✓&main_filter=MLB+Cards&display_name=" + textBox1.Text;
+                webBrowser1.Navigate(url);
+            }
+            else
+            {
+                label10.Text = "Enter a name to search";
+                label10.ForeColor = Color.Red;
+            }
         }
 
         async private void button4_Click(object sender, EventArgs e)
