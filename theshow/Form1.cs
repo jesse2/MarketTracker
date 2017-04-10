@@ -15,6 +15,7 @@ namespace theshow
     {
         List<play> players;
         List<play2> watchlist;
+        List<play2> searchlist;
         public Form1()
         {
             InitializeComponent();
@@ -112,6 +113,10 @@ namespace theshow
                     profit = value;
                 }
             }
+            public void toString()
+            {
+                Console.WriteLine("Name: " + name + "\nID: " + id + "\nBuyNow: " + buynow + "\nSellNow: " + sellnow + "\nProfit: " + profit);
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -120,6 +125,7 @@ namespace theshow
             comboBox1.SelectedIndex = -1;
             players = new List<play>();
             watchlist = new List<play2>();
+            searchlist = new List<play2>();
             getPlayers();
         }
 
@@ -257,18 +263,92 @@ namespace theshow
             webBrowser1.Navigate(url);
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        async private void button4_Click(object sender, EventArgs e)
         {
-            webBrowser1.Navigate("http://theshownation.com/marketplace/watchlist");            
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            dataGridView1.DataSource = null;
-            watchlist.Clear();
+            webBrowser1.Navigate("http://theshownation.com/marketplace/watchlist");
+            await Task.Delay(TimeSpan.FromSeconds(3));
             if (webBrowser1.Url.ToString().Contains("http://theshownation.com/marketplace/watchlist"))
             {
                 String site = webBrowser1.DocumentText;
+                /*using (StreamWriter f = File.AppendText("code.txt"))
+                {
+                    f.WriteLine(site);                
+                }*/
+                String temp = "<H2>";
+                String temp1 = "listing?item_ref_id=";
+                String temp2 = "<INPUT name=\"price\" type=\"hidden\" value=";
+                StringReader read = new StringReader(site);
+                StringBuilder what = new StringBuilder();
+                String line;
+                while ((line = read.ReadLine()) != null)
+                {
+                    if (line.Contains(temp) || line.Contains(temp1) || line.Contains(temp2))
+                    {
+                        what.AppendLine(line);
+                        //Console.WriteLine(line);
+                    }
+                }
+                StringReader read2 = new StringReader(what.ToString());
+                String name = "";
+                String id = "";
+                String buynow = "";
+                String sellnow = "";
+                int count = 1;
+                while ((line = read2.ReadLine()) != null)
+                {
+                    if (count == 1)
+                    {
+                        name = line.Substring(4, (line.IndexOf(" <") - 4));
+                        //Console.WriteLine(name);
+                        count++;
+                    }
+                    else if (count == 2)
+                    {
+                        id = line.Substring((line.Length - 12), (line.IndexOf("\">") - (line.Length - 12)));
+                        //Console.WriteLine(id);
+                        count++;
+                    }
+                    else if (count == 3)
+                    {
+                        buynow = line.Substring(41, ((line.IndexOf(">") - 1) - 41));
+                        //Console.WriteLine(buynow);
+                        count++;
+                    }
+                    else if (count == 4)
+                    {
+                        sellnow = line.Substring(41, ((line.IndexOf(">") - 1) - 41));
+                        //Console.WriteLine(sellnow);
+                        play2 play = new play2();
+                        play.Name = name;
+                        play.ID = id;
+                        play.BuyNow = buynow;
+                        play.SellNow = sellnow;
+                        double profit = double.Parse(buynow) - double.Parse(sellnow) - (double.Parse(buynow) * .1);
+                        profit = Math.Round(profit, 0);
+                        play.Profit = profit;
+                        watchlist.Add(play);
+                        count = 1;
+                    }
+                }
+                List<play2> templist = watchlist.OrderByDescending(o => o.Profit).ToList();
+                dataGridView1.DataSource = templist;
+                dataGridView1.RowHeadersVisible = false;
+                dataGridView1.Columns.Remove("ID");
+                dataGridView1.AutoResizeColumns();
+            }
+        }
+
+        async private void button5_Click(object sender, EventArgs e)
+        {
+            dataGridView1.DataSource = null;
+            dataGridView1.Rows.Clear();
+            dataGridView1.Columns.Clear();
+            watchlist.Clear();
+            webBrowser2.Navigate("http://theshownation.com/marketplace/watchlist");
+            await Task.Delay(TimeSpan.FromSeconds(3));
+            if (webBrowser2.Url.ToString().Contains("http://theshownation.com/marketplace/watchlist"))
+            {
+                String site = webBrowser2.DocumentText;
                 /*using (StreamWriter f = File.AppendText("code.txt"))
                 {
                     f.WriteLine(site);                
@@ -329,10 +409,173 @@ namespace theshow
                         count = 1;
                     }
                 }
-                dataGridView1.DataSource = watchlist;
+                List<play2> templist = watchlist.OrderByDescending(o=>o.Profit).ToList();
+                dataGridView1.DataSource = templist;
                 dataGridView1.RowHeadersVisible = false;
                 dataGridView1.Columns.Remove("ID");
                 dataGridView1.AutoResizeColumns();
+            }
+        }
+
+        async private void button6_Click(object sender, EventArgs e)
+        {
+            label10.Text = "";
+            label10.ForeColor = Color.Black;
+            String min = textBox2.Text;
+            String max = textBox3.Text;
+            if (min.Length > 0 || max.Length > 0)
+            {
+                label10.Text = "Search can take up to 1 minute";
+                label10.ForeColor = Color.Red;
+                searchlist.Clear();
+                dataGridView2.DataSource = null;
+                dataGridView2.Rows.Clear();
+                dataGridView2.Columns.Clear();
+                String url = "http://theshownation.com/marketplace/search?utf8=✓&main_filter=MLB+Cards&display_name=&min_price=" + min + "&max_price=" + max;
+                webBrowser1.Navigate(url);
+                await Task.Delay(TimeSpan.FromSeconds(3));
+                String site = webBrowser1.DocumentText;
+                using (StreamWriter f = File.AppendText("code.txt"))
+                {
+                    f.WriteLine(site);
+                }
+                String pages = "?page=";
+                String line;
+                StringReader read = new StringReader(site);
+                StringBuilder what = new StringBuilder();
+                int numberofpages = 0;
+                while ((line = read.ReadLine()) != null)
+                {
+                    if (line.Contains(pages) && !line.Contains("current"))
+                    {
+                        what.AppendLine(line);
+                        //Console.WriteLine(line);
+                    }
+                }
+                if (what.Length > 0)
+                {
+                    StringReader read2 = new StringReader(what.ToString());
+                    String liner;
+                    while ((liner = read2.ReadLine()) != null)
+                    {
+                        String num = liner.Substring(12, (liner.IndexOf("&") - 12));
+                        //Console.WriteLine("Number of LInes: "+num);
+                        int temp = 0;
+                        temp = Int32.Parse(num);
+                        if (temp > numberofpages)
+                        {
+                            numberofpages = temp;
+                        }
+                    }
+                }
+                //Console.WriteLine("Number of pages" + numberofpages);
+                if (numberofpages > 0)
+                {
+                    if (numberofpages > 21)
+                    {
+                        numberofpages = 21;
+                    }
+
+                    for (int i = 1; i <= numberofpages; i++)
+                    {
+                        String urler = "http://theshownation.com/marketplace/search?page=" + i + "&main_filter=MLB Cards&min_price=" + min + "&max_price=" + max;
+                        webBrowser2.Navigate(urler);
+                        await Task.Delay(TimeSpan.FromSeconds(2));
+                        updatesearchlist(webBrowser2.DocumentText);
+                        await Task.Delay(TimeSpan.FromSeconds(1));
+                    }
+                }
+                else
+                {
+                    String urler = "http://theshownation.com/marketplace/search?page=1" + "&main_filter=MLB Cards&min_price=" + min + "&max_price=" + max;
+                    webBrowser2.Navigate(urler);
+                    await Task.Delay(TimeSpan.FromSeconds(3));
+                    updatesearchlist(webBrowser2.DocumentText);
+                }              
+            }
+            else
+            {
+                label10.Text = "Enter Min or Max Price";
+                label10.ForeColor = Color.Red;
+            }
+        }
+
+        async private void updatesearchlist(String X)
+        {
+             String temp = "Click Buy Now";
+                String temp1 = "listing?item_ref_id=";
+                String temp2 = "<INPUT name=\"price\" type=\"hidden\" value=";
+                StringReader read = new StringReader(X);
+                StringBuilder what = new StringBuilder();
+                String line;
+                while((line=read.ReadLine())!=null)
+                {
+                    if(line.Contains(temp)|| (line.Contains(temp1)&& !line.Contains("<B>"))||line.Contains(temp2))
+                    {
+                        what.AppendLine(line);
+                    }
+                }
+                StringReader read2 = new StringReader(what.ToString());
+                String name="";
+                String id = "";
+                String buynow="";
+                String sellnow="";
+                int count = 1;             
+                while((line=read2.ReadLine())!=null)
+                {
+                    if(count==3)
+                    {
+                        name = line.Substring(line.IndexOf("w', '")+5, (line.IndexOf("');") - (line.IndexOf("w', '")+5)));
+                        count++;
+                    }
+                    else if (count == 1)
+                    {
+                        id = line.Substring((line.IndexOf("d=")+2), (line.IndexOf("\">") - (line.IndexOf("d=")+2)));
+                        count++;
+                    }
+                    else if(count == 2)
+                    {
+                        buynow=line.Substring(41, (line.IndexOf("\">") - 41));
+                        count++;
+                    }
+                    else if(count == 4)
+                    {
+                        sellnow = line.Substring(41, (line.IndexOf("\">") - 41));
+                        play2 play = new play2();
+                        play.Name = name;
+                        play.ID = id;
+                        play.BuyNow = buynow;
+                        play.SellNow = sellnow;
+                        double profit = double.Parse(buynow) - double.Parse(sellnow) - (double.Parse(buynow) * .1);
+                        profit = Math.Round(profit, 0);
+                        play.Profit = profit;
+                        int index = searchlist.FindIndex(f => f.ID == id);
+                        if (index < 0)
+                        {
+                            searchlist.Add(play);
+                        }
+                        count = 1;
+                    }
+                }
+                List<play2> templist = searchlist.OrderByDescending(o=>o.Profit).ToList();
+                dataGridView2.DataSource = templist;
+                dataGridView2.RowHeadersVisible = false;
+                dataGridView2.Columns.Remove("ID");
+                dataGridView2.AutoResizeColumns();
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                label10.Text = "Search Completed";
+                label10.ForeColor = Color.Black;
+            }
+
+        private void dataGridView2_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                String player = dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
+                int index = searchlist.FindIndex(f => f.Name == player);
+                string id = searchlist.ElementAt(index).ID;
+                string url = "http://theshownation.com/marketplace/listing?item_ref_id=" + id;
+                webBrowser1.Navigate(url);
             }
         }
     }

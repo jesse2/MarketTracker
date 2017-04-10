@@ -47,7 +47,15 @@
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.webBrowser2 = new System.Windows.Forms.WebBrowser();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.dataGridView2 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBox1
@@ -55,21 +63,21 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(43, 2);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(119, 21);
+            this.comboBox1.Size = new System.Drawing.Size(148, 21);
             this.comboBox1.TabIndex = 0;
             // 
             // webBrowser1
             // 
-            this.webBrowser1.Location = new System.Drawing.Point(226, 1);
+            this.webBrowser1.Location = new System.Drawing.Point(340, 4);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(1047, 671);
+            this.webBrowser1.Size = new System.Drawing.Size(1027, 671);
             this.webBrowser1.TabIndex = 1;
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(168, 2);
+            this.button1.Location = new System.Drawing.Point(197, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(52, 21);
             this.button1.TabIndex = 2;
@@ -142,9 +150,9 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(136, 66);
+            this.button2.Location = new System.Drawing.Point(265, 4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(84, 21);
+            this.button2.Size = new System.Drawing.Size(69, 23);
             this.button2.TabIndex = 10;
             this.button2.Text = "Add Player";
             this.button2.UseVisualStyleBackColor = true;
@@ -154,12 +162,12 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(43, 27);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(119, 20);
+            this.textBox1.Size = new System.Drawing.Size(148, 20);
             this.textBox1.TabIndex = 11;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(168, 26);
+            this.button3.Location = new System.Drawing.Point(197, 27);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(52, 21);
             this.button3.TabIndex = 12;
@@ -195,7 +203,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(4, 103);
+            this.button4.Location = new System.Drawing.Point(4, 416);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(94, 23);
             this.button4.TabIndex = 16;
@@ -205,27 +213,95 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(105, 103);
+            this.button5.Location = new System.Drawing.Point(105, 416);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(75, 23);
             this.button5.TabIndex = 17;
-            this.button5.Text = "View Below";
+            this.button5.Text = "Refresh";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(4, 143);
+            this.dataGridView1.Location = new System.Drawing.Point(4, 445);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(297, 213);
+            this.dataGridView1.Size = new System.Drawing.Size(330, 230);
             this.dataGridView1.TabIndex = 18;
+            // 
+            // webBrowser2
+            // 
+            this.webBrowser2.Location = new System.Drawing.Point(12, 636);
+            this.webBrowser2.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser2.Name = "webBrowser2";
+            this.webBrowser2.Size = new System.Drawing.Size(250, 250);
+            this.webBrowser2.TabIndex = 19;
+            this.webBrowser2.Visible = false;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Location = new System.Drawing.Point(59, 106);
+            this.textBox2.Name = "textBox2";
+            this.textBox2.Size = new System.Drawing.Size(55, 20);
+            this.textBox2.TabIndex = 20;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(5, 112);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(54, 13);
+            this.label11.TabIndex = 21;
+            this.label11.Text = "Min Price:";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(120, 112);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(57, 13);
+            this.label12.TabIndex = 22;
+            this.label12.Text = "Max Price:";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(180, 105);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(55, 20);
+            this.textBox3.TabIndex = 23;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(265, 102);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(69, 23);
+            this.button6.TabIndex = 24;
+            this.button6.Text = "Search";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // dataGridView2
+            // 
+            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView2.Location = new System.Drawing.Point(4, 132);
+            this.dataGridView2.Name = "dataGridView2";
+            this.dataGridView2.ReadOnly = true;
+            this.dataGridView2.Size = new System.Drawing.Size(330, 278);
+            this.dataGridView2.TabIndex = 25;
+            this.dataGridView2.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentDoubleClick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1276, 660);
+            this.ClientSize = new System.Drawing.Size(1369, 680);
+            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.button6);
+            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.label11);
+            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.webBrowser2);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
@@ -249,6 +325,7 @@
             this.Text = "Market Calculator";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -275,6 +352,13 @@
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.WebBrowser webBrowser2;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.DataGridView dataGridView2;
     }
 }
 
