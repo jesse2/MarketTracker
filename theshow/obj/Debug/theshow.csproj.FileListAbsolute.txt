@@ -16,3 +16,12 @@ C:\Users\jesse\Source\Repos\MarketTracker\theshow\obj\Debug\theshow.pdb
 \\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\New folder\theshow\obj\Debug\theshow.Form1.resources
 \\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\New folder\theshow\obj\Debug\theshow.Properties.Resources.resources
 \\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\New folder\theshow\obj\Debug\theshow.csproj.GenerateResource.Cache
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\bin\Debug\theshow.exe.config
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\obj\Debug\theshow.exe
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\obj\Debug\theshow.pdb
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\bin\Debug\theshow.exe
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\bin\Debug\theshow.pdb
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\obj\Debug\theshow.csprojResolveAssemblyReference.cache
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\obj\Debug\theshow.Form1.resources
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\obj\Debug\theshow.Properties.Resources.resources
+\\CHD-PPFS-001\Home\jecastaneda\My Documents\Visual Studio 2013\Projects\TheShow\theshow\obj\Debug\theshow.csproj.GenerateResource.Cache

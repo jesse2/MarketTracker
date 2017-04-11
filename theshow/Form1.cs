@@ -586,5 +586,65 @@ namespace theshow
                 webBrowser1.Navigate(url);
             }
         }
+
+        async private void button7_Click(object sender, EventArgs e)
+        {
+            //String url = "http://theshownation.com/marketplace/completed_orders";
+            String url = "http://theshownation.com/marketplace/orders";
+            webBrowser2.Navigate(url);
+            await Task.Delay(TimeSpan.FromSeconds(3));
+            String site = webBrowser2.DocumentText;
+            HtmlElementCollection tables = webBrowser2.Document.GetElementsByTagName("TABLE");
+            int count = 1;
+            Console.WriteLine("Buy Orders");
+            String fa="";
+            int index = 1;
+            foreach(HtmlElement tbl in tables)
+            {
+                if(count==2)
+                {
+                    Console.WriteLine("Sell Orders");
+                }
+                String temp = tbl.InnerText;              
+                HtmlElementCollection ff = tbl.GetElementsByTagName("td");
+                foreach(HtmlElement st in ff)
+                {
+                    fa = st.InnerText;
+                    String fsd = st.InnerHtml;
+                    if(fa!=null)
+                    {
+                        if(!fa.ElementAt(2).Equals(' '))
+                        {
+                            fa = fa.Trim();
+                            if(index == 1)
+                            {
+                               // Console.WriteLine(fsd);
+                               String tempo = fsd.Substring((fsd.IndexOf("d=") + 2), (fsd.IndexOf("\">") - (fsd.IndexOf("d=") + 2)));
+                                Console.WriteLine(tempo);
+                                Console.WriteLine("Name: "+fa);
+                                index++;
+                            }
+                            else if(index == 2)
+                            {
+                                if(count==1)
+                                {
+                                    Console.WriteLine("Buy Price: " + fa);
+                                }
+                                if(count==2)
+                                {
+                                    Console.WriteLine("Sell Price: " + fa);
+                                }
+                                index++;
+                            }
+                            else if(index==3)
+                            {
+                                index = 1;
+                            }
+                        }
+                    }
+                }
+                count++;
+            }
+        }
     }
 }
