@@ -59,6 +59,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.dataGridView4 = new System.Windows.Forms.DataGridView();
             this.label14 = new System.Windows.Forms.Label();
+            this.webBrowser3 = new System.Windows.Forms.WebBrowser();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
@@ -347,12 +348,21 @@
             this.label14.TabIndex = 30;
             this.label14.Text = "My Buy Orders";
             // 
+            // webBrowser3
+            // 
+            this.webBrowser3.Location = new System.Drawing.Point(1012, 27);
+            this.webBrowser3.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser3.Name = "webBrowser3";
+            this.webBrowser3.Size = new System.Drawing.Size(355, 492);
+            this.webBrowser3.TabIndex = 31;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(1010, 524);
+            this.ClientSize = new System.Drawing.Size(1369, 524);
+            this.Controls.Add(this.webBrowser3);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.dataGridView4);
             this.Controls.Add(this.label13);
@@ -429,6 +439,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.DataGridView dataGridView4;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.WebBrowser webBrowser3;
     }
 }
 
