@@ -194,18 +194,24 @@ namespace theshow
             searchlist = new List<play2>();
             sellorderlist = new List<play3>();
             buyorderlist = new List<play3>();
-            getPlayers();
+            //getPlayers();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            String ur = "http://theshownation.com/marketplace/listing?item_ref_id=";
+            //String ur = "http://theshownation.com/marketplace/listing?item_ref_id=";
             if (comboBox1.SelectedIndex >= 0)
             {
-                String url = ur + players.ElementAt(comboBox1.SelectedIndex).I;
+                String url = "http://theshownation.com/marketplace/completed_orders";
+                webBrowser3.Navigate(url);
+                String myprice = sellorderlist.ElementAt(comboBox1.SelectedIndex).MyPrice;
+                textBox4.Text = myprice;
+
+                
+                /*String url = ur + players.ElementAt(comboBox1.SelectedIndex).I;
                 webBrowser1.Navigate(url);
                 label10.Text = "";
-                label10.ForeColor = Color.Black;
+                label10.ForeColor = Color.Black;*/
             }
             else
             {
@@ -256,48 +262,6 @@ namespace theshow
                 else
                 {
                     label6.ForeColor = Color.Red;
-                }
-            }
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (webBrowser1.Url.ToString().Contains("http://theshownation.com/marketplace/listing?item_ref_id="))
-            {                              
-                String id = webBrowser1.Url.ToString().Substring((webBrowser1.Url.ToString().Length - 5), 5);
-                id = id.Replace(" ", String.Empty);             
-                String site = webBrowser1.DocumentText;
-                StringReader read = new StringReader(site);
-                String line;
-                while (true)
-                {
-                    line = read.ReadLine();
-                    if(line.Contains("<H2>#"))
-                    {
-                        break;
-                    }
-                }
-                String name=line.Substring(8, (line.IndexOf(" </H") - 8));
-                if (name.ElementAt(0).Equals(' '))
-                {
-                    name = name.Substring(1, name.Length - 1);
-                }
-                int index = players.FindIndex(f => f.I == id);
-                if (index < 0)
-                {
-                    using (StreamWriter w = File.AppendText("players.txt"))
-                    {
-                        w.WriteLine(name + ", " + id);
-                        label10.Text = name + " has been added";
-                        label10.ForeColor = Color.Black;
-                    }
-                    comboBox1.Items.Clear();
-                    getPlayers();
-                }
-                else
-                {
-                    label10.Text = name + " already in list";
-                    label10.ForeColor = Color.Red;
                 }
             }
         }
@@ -595,7 +559,6 @@ namespace theshow
             String url = "http://theshownation.com/marketplace/orders";
             webBrowser3.Navigate(url);
             await Task.Delay(TimeSpan.FromSeconds(3));
-            //String site = webBrowser3.DocumentText;
             HtmlElementCollection tables = webBrowser3.Document.GetElementsByTagName("TABLE");
             int count = 1;
             String fa="";
@@ -732,6 +695,11 @@ namespace theshow
             dataGridView4.RowHeadersVisible = false;
             dataGridView4.Columns.Remove("ID");
             dataGridView4.AutoResizeColumns();
+            comboBox1.Items.Clear();
+            foreach(play3 play in sellorderlist)
+            {
+                comboBox1.Items.Add(play.Name);
+            }
         }
 
         private void dataGridView3_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -767,6 +735,27 @@ namespace theshow
                 string id = watchlist.ElementAt(index).ID;
                 string url = "http://theshownation.com/marketplace/listing?item_ref_id=" + id;
                 webBrowser1.Navigate(url);
+            }
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                double sell = double.Parse(textBox4.Text);
+                double buy = double.Parse(textBox5.Text);
+                double profit = sell - buy - (sell * .1);
+                double min = ((buy+100) / .9);
+                min = Math.Ceiling(min);
+                profit = Math.Round(profit, 0);
+                label19.Text = profit.ToString();
+                label21.Text = min.ToString();
+                label10.Text = "";
+                label10.ForeColor = Color.Black;
+            }catch(Exception eff)
+            {
+                label10.Text = "values messed up";
+                label10.ForeColor = Color.Red;
             }
         }
     }
