@@ -197,21 +197,21 @@ namespace theshow
             //getPlayers();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        async private void button1_Click(object sender, EventArgs e)
         {
-            //String ur = "http://theshownation.com/marketplace/listing?item_ref_id=";
+            
             if (comboBox1.SelectedIndex >= 0)
             {
+                textBox5.Text = "";
+                label19.Text = "";
+                label21.Text = "";
                 String url = "http://theshownation.com/marketplace/completed_orders";
                 webBrowser3.Navigate(url);
+                await Task.Delay(TimeSpan.FromSeconds(3));
                 String myprice = sellorderlist.ElementAt(comboBox1.SelectedIndex).MyPrice;
                 textBox4.Text = myprice;
-
-                
-                /*String url = ur + players.ElementAt(comboBox1.SelectedIndex).I;
-                webBrowser1.Navigate(url);
                 label10.Text = "";
-                label10.ForeColor = Color.Black;*/
+                label10.ForeColor = Color.Black;
             }
             else
             {
