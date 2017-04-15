@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-
+using System.Diagnostics;
 namespace theshow
 {
     public partial class Form1 : Form
@@ -695,6 +695,7 @@ namespace theshow
             dataGridView4.RowHeadersVisible = false;
             dataGridView4.Columns.Remove("ID");
             dataGridView4.AutoResizeColumns();
+
             comboBox1.Items.Clear();
             foreach(play3 play in sellorderlist)
             {
@@ -757,6 +758,12 @@ namespace theshow
                 label10.Text = "values messed up";
                 label10.ForeColor = Color.Red;
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo look = new ProcessStartInfo("https://www.paypal.me/payjesse");
+            Process.Start(look);
         }
     }
 }
