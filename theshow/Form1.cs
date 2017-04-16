@@ -529,9 +529,9 @@ namespace theshow
                 dataGridView2.RowHeadersVisible = false;
                 dataGridView2.Columns.Remove("ID");
                 dataGridView2.AutoResizeColumns();
-                await Task.Delay(TimeSpan.FromSeconds(1));
-                label10.Text = "Search Completed";
-                label10.ForeColor = Color.Black;
+               // await Task.Delay(TimeSpan.FromSeconds(1));
+                //label10.Text = "Search Completed";
+                //label10.ForeColor = Color.Black;
             }
 
         private void dataGridView2_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -575,7 +575,7 @@ namespace theshow
                     String fsd = st.InnerHtml;
                     if(fa!=null)
                     {
-                        if(!fa.ElementAt(2).Equals(' '))
+                        if(!fa.ElementAt(1).Equals(' '))
                         {                          
                             fa = fa.Trim();
                             if(index == 1)
@@ -764,6 +764,12 @@ namespace theshow
         {
             ProcessStartInfo look = new ProcessStartInfo("https://www.paypal.me/payjesse");
             Process.Start(look);
+        }
+
+        private void dataGridView2_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            label10.Text = "Search Completed";
+            label10.ForeColor = Color.Black;
         }
     }
 }

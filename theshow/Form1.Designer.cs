@@ -89,7 +89,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(7, 86);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(330, 540);
+            this.webBrowser1.Size = new System.Drawing.Size(330, 515);
             this.webBrowser1.TabIndex = 1;
             this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
             // 
@@ -299,6 +299,7 @@
             this.dataGridView2.Size = new System.Drawing.Size(330, 278);
             this.dataGridView2.TabIndex = 25;
             this.dataGridView2.CellContentDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentDoubleClick);
+            this.dataGridView2.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.dataGridView2_DataBindingComplete);
             // 
             // button7
             // 
@@ -353,7 +354,7 @@
             this.webBrowser3.Location = new System.Drawing.Point(1012, 86);
             this.webBrowser3.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser3.Name = "webBrowser3";
-            this.webBrowser3.Size = new System.Drawing.Size(331, 515);
+            this.webBrowser3.Size = new System.Drawing.Size(404, 515);
             this.webBrowser3.TabIndex = 31;
             // 
             // textBox4
@@ -457,7 +458,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1346, 605);
+            this.ClientSize = new System.Drawing.Size(1416, 604);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.label20);
