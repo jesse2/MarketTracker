@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
+using Supremes;
+
 namespace theshow
 {
     public partial class Form1 : Form
@@ -188,6 +190,7 @@ namespace theshow
         private void Form1_Load(object sender, EventArgs e)
         {
             webBrowser1.Navigate("http://theshownation.com/marketplace/orders");
+            webBrowser3.Navigate("http://theshownation.com/marketplace/completed_orders");
             comboBox1.SelectedIndex = -1;
             players = new List<play>();
             watchlist = new List<play2>();
@@ -310,30 +313,42 @@ namespace theshow
             }
         }
 
-        async private void button4_Click(object sender, EventArgs e)
-        {
-            dataGridView1.DataSource = null;
-            dataGridView1.Rows.Clear();
-            dataGridView1.Columns.Clear();
-            watchlist.Clear();
-            webBrowser1.Navigate("http://theshownation.com/marketplace/watchlist");
-            await Task.Delay(TimeSpan.FromSeconds(3));
-            updatewatchlist(webBrowser1.DocumentText);
-        }
-
         async private void button5_Click(object sender, EventArgs e)
         {
             dataGridView1.DataSource = null;
             dataGridView1.Rows.Clear();
             dataGridView1.Columns.Clear();
-            watchlist.Clear();
+            watchlist.Clear();            
             webBrowser2.Navigate("http://theshownation.com/marketplace/watchlist");
             await Task.Delay(TimeSpan.FromSeconds(3));
-            updatewatchlist(webBrowser2.DocumentText);
+
+            //new test
+            var doc = Dcsoup.Parse(webBrowser2.DocumentText);
+            var pages = doc.Select("a[href*=page]");
+            int counter = 0;
+            if (pages.Count() > 1)
+            {
+                var page = pages.ElementAt(pages.Count() - 2);
+                counter = Int32.Parse(page.Text);
+            }
+            else
+            {
+                counter = 1;
+            }
+
+            updatewatchlist(counter);
+            //updatewatchlist(webBrowser2.DocumentText);
         }
-        private void updatewatchlist(String X)
+
+        //previous it had String X, switching to int for now
+        async private void updatewatchlist(int X)
         {
-                String site = X;
+            
+            for(int i=1;i<=X;i++)
+            {
+                webBrowser2.Navigate("http://theshownation.com/marketplace/watchlist?page="+i);
+                await Task.Delay(3000);
+                String site = webBrowser2.DocumentText;
                 String temp = "<H2>";
                 String temp1 = "listing?item_ref_id=";
                 String temp2 = "<INPUT name=\"price\" type=\"hidden\" value=";
@@ -385,12 +400,15 @@ namespace theshow
                         count = 1;
                     }
                 }
-                List<play2> templist = watchlist.OrderByDescending(o => o.Profit).ToList();
-                dataGridView1.DataSource = templist;
-                dataGridView1.RowHeadersVisible = false;
-                dataGridView1.Columns.Remove("ID");
-                dataGridView1.AutoResizeColumns();
+            }
+            List<play2> templist = watchlist.OrderByDescending(o => o.Profit).ToList();
+            dataGridView1.DataSource = templist;
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.Columns.Remove("ID");
+            dataGridView1.AutoResizeColumns();
+            dataGridView1.AutoResizeRows();
         }
+
         async private void button6_Click(object sender, EventArgs e)
         {
             label10.Text = "";
@@ -405,133 +423,86 @@ namespace theshow
                 dataGridView2.DataSource = null;
                 dataGridView2.Rows.Clear();
                 dataGridView2.Columns.Clear();
-                String url = "http://theshownation.com/marketplace/search?utf8=✓&main_filter=MLB+Cards&display_name=&min_price=" + min + "&max_price=" + max;
-                webBrowser1.Navigate(url);
-                await Task.Delay(TimeSpan.FromSeconds(3));
-                String site = webBrowser1.DocumentText;
-                String pages = "?page=";
-                String line;
-                StringReader read = new StringReader(site);
-                StringBuilder what = new StringBuilder();
-                int numberofpages = 0;
-                while ((line = read.ReadLine()) != null)
+                String serieschoice = comboBox2.Text;
+                String series = "";
+                String url = "";
+                if (serieschoice.Equals("Live"))
                 {
-                    if (line.Contains(pages) && !line.Contains("current"))
-                    {
-                        what.AppendLine(line);
-                    }
+                    series = "&series_id=1337";
                 }
-                if (what.Length > 0)
-                {
-                    StringReader read2 = new StringReader(what.ToString());
-                    String liner;
-                    while ((liner = read2.ReadLine()) != null)
-                    {
-                        String num = liner.Substring(12, (liner.IndexOf("&") - 12));
-                        int temp = 0;
-                        temp = Int32.Parse(num);
-                        if (temp > numberofpages)
-                        {
-                            numberofpages = temp;
-                        }
-                    }
-                }
-                if (numberofpages > 0)
-                {
-                    if (numberofpages > 21)
-                    {
-                        numberofpages = 21;
-                    }
 
-                    for (int i = 1; i <= numberofpages; i++)
+                url = "http://theshownation.com/marketplace/search?utf8=✓&main_filter=MLB+Cards&display_name=&min_price=" + min + "&max_price=" + max + series;
+
+                webBrowser2.Navigate(url);
+                await Task.Delay(TimeSpan.FromSeconds(3));
+                var doc = Dcsoup.Parse(webBrowser2.DocumentText);
+                var pages = doc.Select("a[href*=page]");
+                int counter = 0;
+                if (pages.Count() > 1)
+                {
+                    var page = pages.ElementAt(pages.Count() - 2);
+                    counter = Int32.Parse(page.Text);
+                    if(counter>20)
                     {
-                        String urler = "http://theshownation.com/marketplace/search?page=" + i + "&main_filter=MLB Cards&min_price=" + min + "&max_price=" + max;
-                        webBrowser2.Navigate(urler);
-                        await Task.Delay(TimeSpan.FromSeconds(2));
-                        updatesearchlist(webBrowser2.DocumentText);
-                        await Task.Delay(TimeSpan.FromSeconds(1));
+                        counter = 20;
                     }
                 }
                 else
                 {
-                    String urler = "http://theshownation.com/marketplace/search?page=1" + "&main_filter=MLB Cards&min_price=" + min + "&max_price=" + max;
-                    webBrowser2.Navigate(urler);
-                    await Task.Delay(TimeSpan.FromSeconds(3));
-                    updatesearchlist(webBrowser2.DocumentText);
-                }              
-            }
-            else
-            {
-                label10.Text = "Enter Min or Max Price";
-                label10.ForeColor = Color.Red;
+                    counter = 1;
+                }
+                updatesearchlist(counter,min,max,series);
             }
         }
 
-        async private void updatesearchlist(String X)
+         async private void updatesearchlist(int X,String min, String max, String series)
         {
-             String temp = "Click Buy Now";
-                String temp1 = "listing?item_ref_id=";
-                String temp2 = "<INPUT name=\"price\" type=\"hidden\" value=";
-                StringReader read = new StringReader(X);
-                StringBuilder what = new StringBuilder();
-                String line;
-                while((line=read.ReadLine())!=null)
+            for (int i = 1; i <= X; i++)
+            {
+                String urler = "http://theshownation.com/marketplace/search?page=" + i + "&main_filter=MLB Cards&min_price=" + min + "&max_price=" + max + series;
+                webBrowser2.Navigate(urler);
+                await Task.Delay(3000);
+                var pager = Dcsoup.Parse(webBrowser2.DocumentText);
+                var tds = pager.Select("td");
+                int count = 0;
+                foreach (var td in tds)
                 {
-                    if(line.Contains(temp)|| (line.Contains(temp1)&& !line.Contains("<B>"))||line.Contains(temp2))
+                    if (count == 3)
                     {
-                        what.AppendLine(line);
-                    }
-                }
-                StringReader read2 = new StringReader(what.ToString());
-                String name="";
-                String id = "";
-                String buynow="";
-                String sellnow="";
-                int count = 1;             
-                while((line=read2.ReadLine())!=null)
-                {
-                    if(count==3)
-                    {
-                        name = line.Substring(line.IndexOf("w', '")+5, (line.IndexOf("');") - (line.IndexOf("w', '")+5)));
-                        count++;
-                    }
-                    else if (count == 1)
-                    {
-                        id = line.Substring((line.IndexOf("d=")+2), (line.IndexOf("\">") - (line.IndexOf("d=")+2)));
-                        count++;
-                    }
-                    else if(count == 2)
-                    {
-                        buynow=line.Substring(41, (line.IndexOf("\">") - 41));
-                        count++;
-                    }
-                    else if(count == 4)
-                    {
-                        sellnow = line.Substring(41, (line.IndexOf("\">") - 41));
+                        var what = td.Select("a[href*=listing]");
+                        String whatone = what.ElementAt(0).OuterHtml;
+                        int beg = whatone.IndexOf("id=") + 3;
+                        String id = whatone.Substring(beg, 5);
+                        var yes = td.Select("input[name*=price]");
+                        int start = yes.ElementAt(0).OuterHtml.IndexOf("ue=\"") + 4;
+                        int end = yes.ElementAt(0).OuterHtml.IndexOf("\">");
+                        String buystring = yes.ElementAt(0).OuterHtml.Substring(start, (end - start));
+                        int end1 = yes.ElementAt(1).OuterHtml.IndexOf("\">");
+                        String sellstring = yes.ElementAt(1).OuterHtml.Substring(start, (end1 - start));
+                        String name = what.ElementAt(0).Text;
+                        double profit = double.Parse(buystring) - double.Parse(sellstring) - (double.Parse(buystring) * .1);
+                        profit = Math.Round(profit, 0);
                         play2 play = new play2();
                         play.Name = name;
                         play.ID = id;
-                        play.BuyNow = buynow;
-                        play.SellNow = sellnow;
-                        double profit = double.Parse(buynow) - double.Parse(sellnow) - (double.Parse(buynow) * .1);
-                        profit = Math.Round(profit, 0);
-                        play.Profit = profit;
-                        int index = searchlist.FindIndex(f => f.ID == id);
-                        if (index < 0)
-                        {
-                            searchlist.Add(play);
-                        }
-                        count = 1;
+                        play.BuyNow = buystring;
+                        play.SellNow = sellstring;
+                        play.Profit = profit;                        
+                        searchlist.Add(play);
+                    }
+                    count++;
+                    if (count == 4)
+                    {
+                        count = 0;
                     }
                 }
-                List<play2> templist = searchlist.OrderByDescending(o=>o.Profit).ToList();
-                dataGridView2.DataSource = templist;
-                dataGridView2.RowHeadersVisible = false;
-                dataGridView2.Columns.Remove("ID");
-                dataGridView2.AutoResizeColumns();
-               // await Task.Delay(TimeSpan.FromSeconds(1));
-                //label10.Text = "Search Completed";
-                //label10.ForeColor = Color.Black;
+            }
+             List<play2> templist = searchlist.OrderByDescending(o => o.Profit).ToList();
+             dataGridView2.DataSource = templist;
+             dataGridView2.RowHeadersVisible = false;
+             dataGridView2.Columns.Remove("ID");
+             dataGridView2.AutoResizeColumns();
+             dataGridView2.AutoResizeRows();        
             }
 
         private void dataGridView2_CellContentDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -655,6 +626,7 @@ namespace theshow
             dataGridView3.RowHeadersVisible = false;
             dataGridView3.Columns.Remove("ID");
             dataGridView3.AutoResizeColumns();
+            dataGridView3.AutoResizeRows();
             updatebuyorders();
         }
 
@@ -695,7 +667,7 @@ namespace theshow
             dataGridView4.RowHeadersVisible = false;
             dataGridView4.Columns.Remove("ID");
             dataGridView4.AutoResizeColumns();
-
+            dataGridView4.AutoResizeRows();
             comboBox1.Items.Clear();
             foreach(play3 play in sellorderlist)
             {
@@ -720,10 +692,17 @@ namespace theshow
             if (e.ColumnIndex == 0)
             {
                 String player = dataGridView4.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                int index = buyorderlist.FindIndex(f => f.Name == player);
-                string id = buyorderlist.ElementAt(index).ID;
-                string url = "http://theshownation.com/marketplace/listing?item_ref_id=" + id;
-                webBrowser1.Navigate(url);
+                try
+                {
+                    int index = buyorderlist.FindIndex(f => f.Name == player);
+                    
+                    string id = buyorderlist.ElementAt(index).ID;
+                    string url = "http://theshownation.com/marketplace/listing?item_ref_id=" + id;
+                    webBrowser1.Navigate(url);
+                }
+                catch(Exception eff){
+                    MessageBox.Show("Issue with Buy List: \nAmount of players in list: "+buyorderlist.Count());
+                }
             }
         }
 
@@ -732,7 +711,8 @@ namespace theshow
             if (e.ColumnIndex == 0)
             {
                 String player = dataGridView1.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
-                int index = watchlist.FindIndex(f => f.Name == player);
+                String buynow = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                int index = watchlist.FindIndex(f => f.Name == player && f.BuyNow==buynow);
                 string id = watchlist.ElementAt(index).ID;
                 string url = "http://theshownation.com/marketplace/listing?item_ref_id=" + id;
                 webBrowser1.Navigate(url);
@@ -770,6 +750,16 @@ namespace theshow
         {
             label10.Text = "Search Completed";
             label10.ForeColor = Color.Black;
+        }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            webBrowser3.Navigate("http://theshownation.com/marketplace/completed_orders");
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            webBrowser3.Navigate("http://theshownation.com/marketplace/orders");
         }
     }
 }
